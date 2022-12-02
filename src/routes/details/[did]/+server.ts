@@ -1,5 +1,5 @@
-import type { RequestEvent } from '@sveltejs/kit'
+import type { RequestEvent } from '@sveltejs/kit';
 
-export function GET({ params } : RequestEvent) {
+export function GET({ params }: RequestEvent) {
 	return new Response(String(params.did));
 }

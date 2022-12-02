@@ -2,4 +2,6 @@
 	import '../app.scss';
 </script>
 
-<slot />
+<div class="p-3">
+	<slot />
+</div>
