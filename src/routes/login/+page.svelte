@@ -6,5 +6,8 @@
 	<div class="row justify-content-center">
 		<Login />
 	</div>
-	<a href="/register">Register</a>
+	<div class="text-center">
+		<br />
+		<a href="/register">Register</a>
+	</div>
 </div>

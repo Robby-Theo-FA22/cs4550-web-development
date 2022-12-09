@@ -1,20 +1,48 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { useForm, Hint, validators, required } from 'svelte-use-form';
+
+	const form = useForm();
+
+	const requiredMessage = 'This field is required.';
 </script>
 
 <div>
-	<h1>Log In</h1>
-	<form method="POST" use:enhance action="/login">
+	<h1>Login</h1>
+	<form method="POST" use:form use:enhance action="/login">
 		<div class="form-group">
-			<input class="form-control" name="username" type="text" placeholder="Username" required />
+			<label for="username">Username</label>
+			<input
+				class="form-control"
+				id="username"
+				name="username"
+				type="text"
+				use:validators={[required]}
+			/>
+			<Hint on="required">{requiredMessage}</Hint>
+			<br />
+
+			<label for="password">Password</label>
+			<input
+				class="form-control"
+				id="password"
+				name="password"
+				type="password"
+				use:validators={[required]}
+			/>
+			<Hint on="required">{requiredMessage}</Hint>
+			<br />
 		</div>
 
-		<div class="form-group">
-			<input class="form-control" name="password" type="password" placeholder="Password" required />
+		<div class="text-center">
+			<button class="btn btn-primary " disabled={!$form.valid} type="submit">Login</button>
 		</div>
-		<button class="btn btn-primary" type="submit"> Log In </button>
 	</form>
 </div>
 
-<style>
+<style lang="scss">
+	:global(.touched:invalid) {
+		border-color: red;
+		outline-color: red;
+	}
 </style>

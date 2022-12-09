@@ -1,46 +1,73 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { useForm, Hint, validators, minLength } from 'svelte-use-form';
+	import { useForm, Hint, HintGroup, validators, minLength, required } from 'svelte-use-form';
+	import { matchInput } from '$lib/forms/FormValidators';
 
 	const form = useForm();
+
+	const requiredMessage = 'This field is required.';
 </script>
 
 <div>
 	<h1>Register</h1>
 	<form method="POST" use:form use:enhance action="/register">
 		<div class="form-group">
+			<label for="username">Username</label>
 			<input
 				class="form-control"
+				id="username"
 				name="username"
 				type="text"
-				placeholder="Username"
-				use:validators={[minLength(5)]}
+				use:validators={[required, minLength(5)]}
 			/>
-			<Hint for="username" on="minLength" let:value>
-				Password requires at least {value} characters.
-			</Hint>
-		</div>
+			<HintGroup for="username">
+				<Hint on="required">{requiredMessage}</Hint>
+				<Hint for="username" on="minLength" hideWhenRequired let:value>
+					Username requires at least {value} characters.
+				</Hint>
+			</HintGroup>
+			<br />
 
-		<div class="form-group">
+			<label for="password">Password</label>
 			<input
 				class="form-control"
+				id="password"
 				name="password"
 				type="password"
-				placeholder="Password"
-				use:validators={[minLength(5)]}
+				use:validators={[required, minLength(5)]}
 			/>
-			<Hint for="password" on="minLength" let:value>
-				Password requires at least {value} characters.
-			</Hint>
+			<HintGroup for="password">
+				<Hint on="required">{requiredMessage}</Hint>
+				<Hint on="minLength" hideWhenRequired let:value>
+					This field must have at least {value} characters.
+				</Hint>
+			</HintGroup>
+			<br />
 
+			<label for="verifyPassword">Verify Password</label>
 			<input
 				class="form-control"
+				id="verifyPassword"
 				name="verifyPassword"
 				type="password"
-				placeholder="Verify Password"
+				use:validators={[required, matchInput('password')]}
 			/>
+			<HintGroup for="verifyPassword">
+				<Hint on="required">{requiredMessage}</Hint>
+				<Hint on="passwordMatch" hideWhenRequired>Passwords do not match</Hint>
+			</HintGroup>
+			<br />
 		</div>
 
-		<button class="btn btn-primary" disabled={!$form.valid} type="submit">Register</button>
+		<div class="text-center">
+			<button class="btn btn-primary " disabled={!$form.valid} type="submit">Register </button>
+		</div>
 	</form>
 </div>
+
+<style lang="scss">
+	:global(.touched:invalid) {
+		border-color: red;
+		outline-color: red;
+	}
+</style>
