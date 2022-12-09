@@ -1,4 +1,4 @@
-import { invalid, type Actions } from '@sveltejs/kit';
+import { invalid, redirect, type Actions } from '@sveltejs/kit';
 import { findUserByCredentials } from '$lib/db/User';
 
 /** Form submission actions */
@@ -25,14 +25,12 @@ export const actions: Actions = {
 
 		// Reject if there is no user matching the credentials
 		if (user == null) {
-			return invalid(401);
+			return invalid(401, { credentials: username, invalid: true });
 		}
 
 		// Log the user in by setting the currentUser cookie to the user's username
 		cookies.set('currentUser', username, { path: '/' });
-		console.log('User "', username, '" logged in.');
-		return {
-			success: true
-		};
+		console.log('User logged in:', username);
+		throw redirect(302, '/home');
 	}
 };
