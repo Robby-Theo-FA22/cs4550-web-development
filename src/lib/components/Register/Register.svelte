@@ -1,6 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { useForm, Hint, HintGroup, validators, minLength, required } from 'svelte-use-form';
+	import {
+		useForm,
+		Hint,
+		HintGroup,
+		validators,
+		minLength,
+		required,
+		pattern
+	} from 'svelte-use-form';
 	import { matchInput } from '$lib/forms/FormValidators';
 
 	const form = useForm();
@@ -18,12 +26,15 @@
 				id="username"
 				name="username"
 				type="text"
-				use:validators={[required, minLength(5)]}
+				use:validators={[required, pattern(/^[a-zA-Z0-9_-]*$/)]}
 			/>
 			<HintGroup for="username">
 				<Hint on="required">{requiredMessage}</Hint>
-				<Hint for="username" on="minLength" hideWhenRequired let:value>
+				<Hint on="minLength" hideWhenRequired let:value>
 					Username requires at least {value} characters.
+				</Hint>
+				<Hint on="pattern" hideWhenRequired>
+					Illegal character used. Valid characters are: a-z A-Z 0-9 - _
 				</Hint>
 			</HintGroup>
 			<br />

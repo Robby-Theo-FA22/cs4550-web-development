@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
 
 /** Represents a user of NewzLife. */
-interface IUser {
+export interface IUser {
 	/** The user's username. */
 	username: string;
 
@@ -30,18 +30,21 @@ export const createUser = async (user: IUser) => userModel.create(user);
 
 // Read
 /** Find all users. */
-export const findUsers = async () => userModel.find();
+export const findUsers = async () => await userModel.find();
 
 /** Find the user with the supplied username */
-export const findUserByUsername = async (username: string) => {
+export const findUserByUsername = async (username: string) =>
 	userModel.findOne({ username: username });
-};
+
+/** Find the user with the supplied credentials */
+export const findUserByCredentials = async (username: string, password: string) =>
+	userModel.findOne({ username: username, password: password });
 
 // Update
 /** Update a user in the database. */
-export const updateUser = (uid: number, user: IUser) =>
-	userModel.updateOne({ _id: uid }, { $set: user });
+export const updateUser = async (uid: number, user: IUser) =>
+	await userModel.updateOne({ _id: uid }, { $set: user });
 
 // Delete
 /** Remove a user from the database. */
-export const deleteUser = (uid: number) => userModel.deleteOne({ _id: uid });
+export const deleteUser = async (uid: number) => await userModel.deleteOne({ _id: uid });

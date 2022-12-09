@@ -1,21 +1,38 @@
 import { invalid, type Actions } from '@sveltejs/kit';
+import { findUserByCredentials } from '$lib/db/User';
 
 /** Form submission actions */
 export const actions: Actions = {
 	/** Action for logging in */
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
+		// Get username and password from login
 		const data = await request.formData();
-		const username = data.get('username');
-		// const password = data.get('password');
+		const username = data.get('username') as string;
+		const password = data.get('password') as string;
 
+		// reject is username is empty
 		if (!username) {
 			return invalid(400, { username, missing: true });
 		}
 
-		//const user = await db.getUser(username);
-		// TODO login the user
+		// reject if password is empty
+		if (!password) {
+			return invalid(400, { password, missing: true });
+		}
 
-		console.log('User logged in:', data.get('username'));
-		return { success: true };
+		// Get the user that matches the supplied credentials from the DB
+		const user = await findUserByCredentials(username, password);
+
+		// Reject if there is no user matching the credentials
+		if (user == null) {
+			return invalid(401);
+		}
+
+		// Log the user in by setting the currentUser cookie to the user's username
+		cookies.set('currentUser', username, { path: '/' });
+		console.log('User "', username, '" logged in.');
+		return {
+			success: true
+		};
 	}
 };
