@@ -12,7 +12,6 @@
 		"paths": {
 			"$lib":["src/lib"],
 			"$lib/*":["src/lib/*"],
-			"$types/*": ["./src/lib/types/*"],
 			"$app/*": ["@sveltejs/kit/assets/app/*"],
 		}
 	}
