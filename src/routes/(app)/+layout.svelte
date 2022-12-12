@@ -12,7 +12,7 @@
 </script>
 
 <!--Layout for the navbar in most of the application-->
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar fixed-top navbar-expand-lg bg-light">
 	<div class="container-fluid">
 		<NavBrand />
 		<NavCollapseToggler>
