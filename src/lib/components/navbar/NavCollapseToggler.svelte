@@ -1,3 +1,4 @@
+<!--A button that shows up when the screen is narrow enough to collapse the navbar-->
 <button
 	class="navbar-toggler"
 	type="button"

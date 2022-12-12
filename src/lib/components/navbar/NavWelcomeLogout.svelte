@@ -7,7 +7,8 @@
 	export let username: string;
 </script>
 
+<!--Welcomes a user to the application and lets them logout-->
 <span class="navbar-text me-2">Welcome, {username}</span>
 <form method="POST" use:form use:enhance action="/api/logout">
-	<button class="btn btn-outline-danger" submit>Log Out</button>
+	<button class="btn btn-outline-danger" type="submit">Log Out</button>
 </form>
