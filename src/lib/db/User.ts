@@ -30,7 +30,7 @@ export const createUser = async (user: IUser) => userModel.create(user);
 
 // Read
 /** Find all users. */
-export const findUsers = async () => await userModel.find();
+export const findUsers = async () => userModel.find();
 
 /** Find the user with the supplied username */
 export const findUserByUsername = async (username: string) =>
