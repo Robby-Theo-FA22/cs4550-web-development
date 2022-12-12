@@ -50,13 +50,11 @@
 								>{['World', 'Popular', 'Breaking'].at(Math.random() * 3)}</strong
 							>
 							<h3 class="mb-0">{pairArticles[0].title}</h3>
-							<div class="mb-1 text-muted">Nov 12</div>
+							<div class="mb-1 text-muted">{pairArticles[0].publishedAt.split('T')[0]}</div>
 							<p class="card-text mb-auto">
 								{pairArticles[0].description}
 							</p>
-							<a href={pairArticles[0].url} class="stretched-link" target="_blank"
-								>Continue reading</a
-							>
+							<a href={pairArticles[0].url} class="stretched-link" target="_blank" />
 						</div>
 						<div class="col-auto d-none d-lg-block relative">
 							<img src={pairArticles[0].urlToImage} class="vertical-center" />
@@ -72,13 +70,11 @@
 								>{['World', 'Popular', 'Breaking'].at(Math.random() * 3)}</strong
 							>
 							<h3 class="mb-0">{pairArticles[1].title}</h3>
-							<div class="mb-1 text-muted">Nov 11</div>
+							<div class="mb-1 text-muted">{pairArticles[1].publishedAt.split('T')[0]}</div>
 							<p class="mb-auto">
 								{pairArticles[1].description}
 							</p>
-							<a href={pairArticles[1].url} class="stretched-link" target="_blank"
-								>Continue reading</a
-							>
+							<a href={pairArticles[1].url} class="stretched-link" target="_blank" />
 						</div>
 						<div class="col-auto d-none d-lg-block relative">
 							<img src={pairArticles[1].urlToImage} class="vertical-center" />
