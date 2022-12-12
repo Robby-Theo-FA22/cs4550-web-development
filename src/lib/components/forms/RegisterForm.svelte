@@ -18,7 +18,7 @@
 
 <div>
 	<h1>Register</h1>
-	<form method="POST" use:form use:enhance action="/register">
+	<form method="POST" use:form use:enhance action="/api/register">
 		<div class="form-group">
 			<label for="username">Username</label>
 			<input

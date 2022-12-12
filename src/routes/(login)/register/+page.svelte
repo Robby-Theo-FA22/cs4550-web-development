@@ -1,13 +1,13 @@
 <script lang="ts">
-	import Login from '$lib/components/Login/LoginForm.svelte';
+	import RegisterForm from '$lib/components/forms/RegisterForm.svelte';
 </script>
 
 <div class="col-lg-6 offset-lg-3">
 	<div class="row justify-content-center">
-		<Login />
+		<RegisterForm />
 	</div>
 	<div class="text-center">
 		<br />
-		<a href="/register">Register</a>
+		<a href="/login">Log in instead</a>
 	</div>
 </div>

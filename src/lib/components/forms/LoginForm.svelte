@@ -9,7 +9,7 @@
 
 <div>
 	<h1>Login</h1>
-	<form method="POST" use:form use:enhance action="/login">
+	<form method="POST" use:form use:enhance action="/api/login">
 		<div class="form-group">
 			<label for="username">Username</label>
 			<input
