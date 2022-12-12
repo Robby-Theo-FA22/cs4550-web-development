@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
 
 export function GET({ params }: RequestEvent) {
-	return new Response(String(params.uid));
+	return new Response(params.uid?.toString());
 }
