@@ -29,7 +29,7 @@
 <main>
 	<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
 		<div class="col-md-12 px-0 center">
-			<h1 class="display-4 fst-italic">Welcome to Newzlife!</h1>
+			<h1 class="display-4 fst-italic">Welcome to NewzLife!</h1>
 			<p class="lead my-3">
 				Find information on the latest news around the world, and share insights and conversations
 				with your peers about them, all at the same time.
