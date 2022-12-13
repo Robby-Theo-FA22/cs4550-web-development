@@ -6,7 +6,7 @@
 </script>
 
 <!--Layout for the navbar for the login and register pages-->
-<nav class="navbar fixed-top navbar-expand-lg bg-light">
+<nav class="navbar sticky-top navbar-expand-lg bg-light">
 	<div class="container-fluid">
 		<NavBrand />
 		<NavCollapseToggler>
