@@ -5,6 +5,7 @@
 	let criteria = $page.url.searchParams.get('criteria');
 	let searchResults;
 
+	// remote API call -> store locally for display
 	function search(givenCriteria) {
 		const searchUrl = new URL($page.url);
 		searchUrl.searchParams.set('criteria', givenCriteria);
@@ -41,6 +42,11 @@
 			.then((response) => response.json())
 			.then((data) => (searchResults = groupBy3(data.articles)))
 			.catch((error) => console.log(error));
+	}
+
+	// reset page if returning to /search
+	$: if (!$page.url.searchParams.get('criteria')) {
+		criteria = null;
 	}
 </script>
 
