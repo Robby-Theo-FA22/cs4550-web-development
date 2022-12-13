@@ -11,6 +11,9 @@ export interface IComment {
 	/** The comment's author. */
 	author: Schema.Types.ObjectId;
 
+	/** The comment's detail. */
+	detail: Schema.Types.ObjectId;
+
 	/** The users that likes this comment. */
 	likes: Schema.Types.ObjectId[];
 }
@@ -23,6 +26,11 @@ const commentSchema = new Schema<IComment>(
 		author: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
+			required: true
+		},
+		detail: {
+			type: Schema.Types.ObjectId,
+			ref: 'Detail',
 			required: true
 		},
 		likes: [
@@ -43,8 +51,8 @@ const commentModel = model<IComment>('Comment', commentSchema);
  *******************************************/
 // Create
 /** Create a comment and save it in the database. */
-export const createComment = async (user: AtLeast<IComment, 'body' | 'author'>) =>
-	commentModel.create(user);
+export const createComment = async (comment: AtLeast<IComment, 'body' | 'author'>) =>
+	commentModel.create(comment);
 
 // Read
 /** Find all comments. */

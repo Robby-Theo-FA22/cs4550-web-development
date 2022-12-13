@@ -48,12 +48,15 @@ const detailModel = model<IDetail>('Detail', detailSchema);
  *****************************************/
 // Create
 /** Create a detail and save it in the database. */
-export const createDetail = async (user: AtLeast<IDetail, 'title' | 'date' | 'sourceID'>) =>
-	detailModel.create(user);
+export const createDetail = async (detail: AtLeast<IDetail, 'title' | 'date' | 'sourceID'>) =>
+	detailModel.create(detail);
 
 // Read
 /** Find all details. */
 export const findDetails = async () => detailModel.find();
+
+/** Find detail by id. */
+export const findDetailById = async (did: string) => detailModel.findById(did);
 
 // Update
 /** Update a detail in the database. */
