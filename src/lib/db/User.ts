@@ -73,6 +73,9 @@ export const createUser = async (user: AtLeast<IUser, 'username' | 'password'>) 
 /** Find all users. */
 export const findUsers = async () => userModel.find();
 
+/** Find the user with the given ID */
+export const findUserById = async (id: string) => userModel.findById(id);
+
 /** Find the user with the supplied username */
 export const findUserByUsername = async (username: string) =>
 	userModel.findOne({ username: username });

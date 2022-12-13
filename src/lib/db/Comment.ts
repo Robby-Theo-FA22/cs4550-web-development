@@ -50,6 +50,9 @@ export const createComment = async (user: AtLeast<IComment, 'body' | 'author'>) 
 /** Find all comments. */
 export const findComments = async () => commentModel.find();
 
+/** Find comment by id. */
+export const findCommentById = async (cid: string) => commentModel.findById(cid);
+
 // Update
 /** Update a comment in the database. */
 export const updateComment = async (did: number, comment: Partial<IComment>) =>
