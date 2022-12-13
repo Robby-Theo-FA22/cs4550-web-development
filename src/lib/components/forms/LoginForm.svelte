@@ -19,7 +19,7 @@
 				type="text"
 				use:validators={[required]}
 			/>
-			<Hint on="required">{requiredMessage}</Hint>
+			<Hint for="username" on="required">{requiredMessage}</Hint>
 			<br />
 
 			<label for="password">Password</label>
@@ -30,7 +30,7 @@
 				type="password"
 				use:validators={[required]}
 			/>
-			<Hint on="required">{requiredMessage}</Hint>
+			<Hint for="username" on="required">{requiredMessage}</Hint>
 			<br />
 		</div>
 
