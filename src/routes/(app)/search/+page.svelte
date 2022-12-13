@@ -2,8 +2,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
-	let criteria;
-	let pp = '23564y';
+	let criteria = $page.url.searchParams.get('criteria');
 
 	function search(givenCriteria) {
 		const searchUrl = new URL($page.url);
@@ -157,4 +156,7 @@
 			</div>
 		</div>
 	</div>
-{/if}
+{:else}{/if}
+
+<style>
+</style>
