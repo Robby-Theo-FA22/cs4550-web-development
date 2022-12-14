@@ -4,6 +4,7 @@
 
 	/** The commentId of the comment */
 	export let commentId: string;
+	export let deleteComment
 
 	$: comment = null;
 	$: author = null;
@@ -26,7 +27,7 @@
 		<div class='card-body'>
 			<a href='/details/{detail._id}'><h4>{detail.title}</h4></a>
 
-			<DetailsComment commentId={comment._id} />
+			<DetailsComment commentId={comment._id} deleteComment={deleteComment}/>
 		</div>
 	</div>
 {:else}

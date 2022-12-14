@@ -35,7 +35,7 @@
 {#if socialInteraction}
 	<h3>Comments</h3>
 	{#each comments as cid}
-		<ProfileComment commentId={cid} />
+		<ProfileComment commentId={cid} deleteComment={deleteComment}/>
 	{:else }
 		<p>Nothing here...</p>
 	{/each}
