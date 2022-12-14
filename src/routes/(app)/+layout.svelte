@@ -12,26 +12,29 @@
 </script>
 
 <!--Layout for the navbar in most of the application-->
-<nav class="navbar sticky-top navbar-expand-lg bg-light">
-	<div class="container-fluid">
-		<NavBrand />
-		<NavCollapseToggler>
-			<NavItemGroup>
-				<NavItem href="home">Home</NavItem>
-				<NavItem href="search">Search</NavItem>
-				<NavItem href="profile">Profile</NavItem>
-			</NavItemGroup>
-			<div class="d-flex">
-				{#if currentUser}
-					<NavWelcomeLogout username={currentUser} />
-				{:else}
-					<NavLoginRegister />
-				{/if}
-			</div>
-		</NavCollapseToggler>
-	</div>
-</nav>
+<div class='container'>
+	<nav class="navbar sticky-top navbar-expand-lg bg-light">
+		<div class="container-fluid">
+			<NavBrand />
+			<NavCollapseToggler>
+				<NavItemGroup>
+					<NavItem href="home">Home</NavItem>
+					<NavItem href="search">Search</NavItem>
+					<NavItem href="profile">Profile</NavItem>
+				</NavItemGroup>
+				<div class="d-flex">
+					{#if currentUser}
+						<NavWelcomeLogout username={currentUser} />
+					{:else}
+						<NavLoginRegister />
+					{/if}
+				</div>
+			</NavCollapseToggler>
+		</div>
+	</nav>
 
-<div class="p-3">
-	<slot />
+	<div class="mt-3">
+		<slot />
+	</div>
 </div>
+

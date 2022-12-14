@@ -25,23 +25,9 @@ export const GET = async ({ params: { did } }: RequestEvent) => {
 		}
 	});
 
-	const articles = (await response.json()).articles;
-	const data = articles.filter((article: any) => article.source.name === storedDetail.sourceName)[0]
+	const article = (await response.json()).articles[0];
 
-	/*
-	// also get full article content from online
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	const articleContent = await (await fetch(rv.url)).json();
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	const dom = new JSDOM(articleContent, { url: rv.url });
-	const article = new Readability(dom.window.document).parse();
-	console.log(article?.textContent);
-	const content = article?.textContent;
-	*/
-
-	return new Response(JSON.stringify(data), {
+	return new Response(JSON.stringify(article), {
 		headers: { 'content-type': 'application/json' }
 	});
 };
