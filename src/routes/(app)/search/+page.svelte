@@ -52,10 +52,7 @@
 	async function createDetailAndRedirect(title, source) {
 		const response = await fetch(`/api/search?title=${title}&source=${source}`);
 		let responseValues = await response.json();
-		let redirectUrl = new URL(
-			$page.url.toString().split('/search')[0] + '/details/' + responseValues
-		);
-		goto(redirectUrl);
+		goto(`/details/${responseValues}`);
 	}
 </script>
 
