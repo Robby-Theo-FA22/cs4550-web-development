@@ -105,6 +105,7 @@
 								<strong>{searchResults[0][0].title}</strong>
 								<div class="d-flex justify-content-between align-items-center">
 									<a
+										href=''
 										on:click={createDetailAndRedirect(
 											searchResults[0][0].title,
 											searchResults[0][0].source.id
@@ -129,6 +130,7 @@
 								<strong>{searchResults[0][0].title}</strong>
 								<div class="d-flex justify-content-between align-items-center">
 									<a
+										href=''
 										on:click={createDetailAndRedirect(
 											searchResults[0][0].title,
 											searchResults[0][0].source.id
@@ -148,6 +150,7 @@
 								<strong>{searchResults[0][1].title}</strong>
 								<div class="d-flex justify-content-between align-items-center">
 									<a
+										href=''
 										on:click={createDetailAndRedirect(
 											searchResults[0][1].title,
 											searchResults[0][1].source.id
@@ -175,6 +178,7 @@
 									<strong>{articleTrio[0].title}</strong>
 									<div class="d-flex justify-content-between align-items-center">
 										<a
+											href=''
 											on:click={createDetailAndRedirect(
 												articleTrio[0].title,
 												articleTrio[0].source.id
@@ -194,6 +198,7 @@
 									<strong>{articleTrio[1].title}</strong>
 									<div class="d-flex justify-content-between align-items-center">
 										<a
+											href=''
 											on:click={createDetailAndRedirect(
 												articleTrio[1].title,
 												articleTrio[1].source.id
@@ -213,6 +218,7 @@
 									<strong>{articleTrio[2].title}</strong>
 									<div class="d-flex justify-content-between align-items-center">
 										<a
+											href=''
 											on:click={createDetailAndRedirect(
 												articleTrio[2].title,
 												articleTrio[2].source.id
