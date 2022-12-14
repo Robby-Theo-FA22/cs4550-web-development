@@ -34,7 +34,7 @@
 
 		const userResponse = fetch(`/api/user/${currentUserData._id}`, {
 			method: 'PUT',
-			body: JSON.stringify(detailsUpdate)
+			body: JSON.stringify(userUpdate)
 		});
 
 		if ((await detailResponse).ok && (await userResponse).ok) {

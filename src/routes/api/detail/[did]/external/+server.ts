@@ -31,7 +31,6 @@ export const GET = async ({ params: { did } }: RequestEvent) => {
 	const articles = json.articles
 	const article = articles[0]
 	if (!article) throw error(404);
-	console.log(article)
 
 	return new Response(JSON.stringify(article), {
 		headers: { 'content-type': 'application/json' }

@@ -10,6 +10,7 @@
 	export let deleteComment;
 
 	$: currentUserData = $page.data.currentUserData;
+	$: currentUser = $page.data.currentUser;
 	$: comment = null;
 	$: author = null;
 	$: likedByCurrentUser = comment?.likes.includes(currentUserData?._id);
@@ -66,9 +67,11 @@
 			<div class='d-flex flex-row align-items-center'>
 				<p class='mb-2'><strong><a href='/profile/{author._id}'>{author.username}</a></strong></p>
 			</div>
-			<div class='d-flex flex-row align-items-center' on:click={handleDelete}>
-				<i class='fa-solid fa-x ms-2 me-1 fa-s text-black}'></i>
-			</div>
+			{#if author.username === currentUser}
+				<div class='d-flex flex-row align-items-center' on:click={handleDelete}>
+					<i class='fa-solid fa-x ms-2 me-1 fa-s text-black}'></i>
+				</div>
+			{/if}
 		</div>
 		<p>{comment.body}</p>
 

@@ -4,11 +4,12 @@
 	import DetailsCommentForm from '$lib/components/details/DetailsCommentForm.svelte';
 
 	$: currentUserData = $page.data.currentUserData;
+	$: currentUser = $page.data.currentUser;
 	$: details = $page.data.details;
 	$: likedByCurrentUser = details.likes.includes(currentUserData?._id);
 
-	$: currentUserBookmarks = currentUserData.bookmarks;
-	$: bookmarkedByCurrentUser = currentUserBookmarks.includes(details?._id);
+	$: currentUserBookmarks = currentUserData?.bookmarks;
+	$: bookmarkedByCurrentUser = currentUserBookmarks?.includes(details?._id);
 
 	$: comments = details.comments;
 	$: externalDetails = $page.data.externalDetails;
@@ -52,7 +53,7 @@
 	};
 
 	const handleBookmark = async () => {
-		if (!currentUserData) return;
+		if (!currentUser) return;
 
 		let userUpdate;
 		if (bookmarkedByCurrentUser) {
