@@ -193,7 +193,7 @@
 					<div class='d-flex flex-row' on:click={handleLike}>
 						<i class='m-4fa-l fa-regular fa-thumbs-up text-{likedByCurrentUser ? "primary" : "black"}'></i>
 					</div>
-					<h1 class='mb-0 h4'>{externalDetails.title}</h1>
+					<h1 class='mb-0 h4'><a href='/details/{details._id}' >{externalDetails.title}</a></h1>
 					<div class='d-flex flex-row-reverse' on:click={handleBookmark}>
 						<i class='m-4fa-l fa-regular fa-bookmark text-{bookmarkedByCurrentUser ? "primary" : "black"}'></i>
 					</div>

@@ -16,7 +16,9 @@ export const GET = async ({ params: { did } }: RequestEvent) => {
 		throw error(404);
 	}
 	// find article via API (from local storage info)
-	const endpoint = `https://newsapi.org/v2/everything?q=${storedDetail.title.replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g,"")}&searchIn=title`;
+	const title = storedDetail.title.replace(/[,/#!$%^&*;:{}=\-_`~()?]/g," ").replace(/\s+/g, " ").toLowerCase()
+	console.log(title)
+	const endpoint = `https://newsapi.org/v2/everything?q=${title}`;
 
 	const response = await fetch(endpoint, {
 		method: 'GET',
@@ -25,7 +27,11 @@ export const GET = async ({ params: { did } }: RequestEvent) => {
 		}
 	});
 
-	const article = (await response.json()).articles[0];
+	const json = (await response.json())
+	const articles = json.articles
+	const article = articles[0]
+	if (!article) throw error(404);
+	console.log(article)
 
 	return new Response(JSON.stringify(article), {
 		headers: { 'content-type': 'application/json' }

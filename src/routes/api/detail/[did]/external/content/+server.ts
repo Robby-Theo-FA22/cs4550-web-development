@@ -18,6 +18,9 @@ export const GET = async ({ params: { did }, fetch }: RequestEvent) => {
 
 	// find article via our API
 	const response = await fetch(`/api/detail/${did}/external`)
+	if (!response.ok) {
+		throw error(404);
+	}
 
 	const article = (await response.json());
 	// also get full article content from online
