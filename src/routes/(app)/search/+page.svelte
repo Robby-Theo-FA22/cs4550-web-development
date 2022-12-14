@@ -134,8 +134,7 @@
 									<a
 										on:click={createDetailAndRedirect(
 											searchResults[0][0].title,
-											searchResults[0][0].publishedAt,
-											searchResults[0][0].source
+											searchResults[0][0].source.id
 										)}
 										class="stretched-link"
 									/>
@@ -154,8 +153,7 @@
 									<a
 										on:click={createDetailAndRedirect(
 											searchResults[0][1].title,
-											searchResults[0][1].publishedAt,
-											searchResults[0][1].source
+											searchResults[0][1].source.id
 										)}
 										class="stretched-link"
 									/>
@@ -182,8 +180,7 @@
 										<a
 											on:click={createDetailAndRedirect(
 												articleTrio[0].title,
-												articleTrio[0].publishedAt,
-												articleTrio[0].source
+												articleTrio[0].source.id
 											)}
 											class="stretched-link"
 										/>
@@ -202,8 +199,7 @@
 										<a
 											on:click={createDetailAndRedirect(
 												articleTrio[1].title,
-												articleTrio[1].publishedAt,
-												articleTrio[1].source
+												articleTrio[1].source.id
 											)}
 											class="stretched-link"
 										/>
@@ -222,8 +218,7 @@
 										<a
 											on:click={createDetailAndRedirect(
 												articleTrio[2].title,
-												articleTrio[2].publishedAt,
-												articleTrio[2].source
+												articleTrio[2].source.id
 											)}
 											class="stretched-link"
 										/>
