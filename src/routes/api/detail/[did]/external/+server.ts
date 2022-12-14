@@ -6,7 +6,7 @@ import { Readability } from '@mozilla/readability';
 export const GET = async ({ params: { did } }: RequestEvent) => {
 	// If detail id is malformed throw a 404.
 	if (!did) {
-		console.log('asdf')
+		console.log('asdf');
 		throw error(404);
 	}
 
@@ -16,17 +16,17 @@ export const GET = async ({ params: { did } }: RequestEvent) => {
 		throw error(404);
 	}
 	// find article via API (from local storage info)
-	const endpoint = `https://newsapi.org/v2/everything?q=${storedDetail.title}&sources=${storedDetail.sourceId}&searchIn=title`;
-	let rv;
-	await fetch(endpoint, {
+	const endpoint = `https://newsapi.org/v2/everything?q=${storedDetail.title.replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g,"")}&searchIn=title`;
+
+	const response = await fetch(endpoint, {
 		method: 'GET',
 		headers: {
 			'X-API-KEY': '2128dfda75c54ed3b045b635f45604e9'
 		}
-	})
-		.then((response) => response.json())
-		.then((data) => (rv = data.articles[0]))
-		.catch((error) => console.log(error));
+	});
+
+	const articles = (await response.json()).articles;
+	const data = articles.filter((article: any) => article.source.name === storedDetail.sourceName)[0]
 
 	/*
 	// also get full article content from online
@@ -41,7 +41,7 @@ export const GET = async ({ params: { did } }: RequestEvent) => {
 	const content = article?.textContent;
 	*/
 
-	return new Response(JSON.stringify(await rv), {
+	return new Response(JSON.stringify(data), {
 		headers: { 'content-type': 'application/json' }
 	});
-}
+};

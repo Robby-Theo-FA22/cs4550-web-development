@@ -1,11 +1,12 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
+	import { page } from '$app/stores';
+
+	const externalDetails = $page.data.externalDetails;
 </script>
 
-{#if data}
+{#if externalDetails}
 	<div id="intro" class="p-5 text-center bg-light">
-		<h1 class="mb-0 h4">{data.title}</h1>
+		<h1 class="mb-0 h4">{externalDetails.title}</h1>
 	</div>
 	<div class="container">
 		<!--Grid row-->
@@ -14,11 +15,11 @@
 			<div class="col-md-8 mb-4">
 				<!--Section: Post data-mdb-->
 				<section class="border-bottom mb-4">
-					<img src={data.urlToImage} class="img-fluid shadow-2-strong rounded-5 mb-4" alt="" />
+					<img src={externalDetails.urlToImage} class="img-fluid shadow-2-strong rounded-5 mb-4" alt="" />
 
 					<div class="row align-items-center mb-4">
 						<div class="col-lg-6 text-center text-lg-start mb-3 m-lg-0">
-							<span> Published {data.publishedAt.split('T')[0]} by {data.author}</span>
+							<span> Published {externalDetails.publishedAt.split('T')[0]} by {externalDetails.author}</span>
 						</div>
 					</div>
 				</section>

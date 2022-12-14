@@ -9,7 +9,7 @@ export async function GET({ url }: RequestEvent) {
 	if (!existingDetail) {
 		existingDetail = await createDetail({
 			title: url.searchParams.get('title') || '',
-			sourceId: url.searchParams.get('source') || ''
+			sourceName: url.searchParams.get('source') || ''
 		});
 	}
 	return new Response(JSON.stringify(existingDetail._id), {
