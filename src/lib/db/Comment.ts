@@ -51,7 +51,7 @@ const commentModel = model<IComment>('Comment', commentSchema);
  *******************************************/
 // Create
 /** Create a comment and save it in the database. */
-export const createComment = async (comment: AtLeast<IComment, 'body' | 'author'>) =>
+export const createComment = async (comment: AtLeast<IComment, 'body' | 'author' | 'detail'>) =>
 	commentModel.create(comment);
 
 // Read
@@ -63,9 +63,9 @@ export const findCommentById = async (cid: string) => commentModel.findById(cid)
 
 // Update
 /** Update a comment in the database. */
-export const updateComment = async (did: number, comment: Partial<IComment>) =>
-	await commentModel.updateOne({ _id: did }, { $set: comment });
+export const updateComment = async (cid: string, comment: Partial<IComment>) =>
+	await commentModel.updateOne({ _id: cid }, { $set: comment });
 
 // Delete
 /** Remove a comment from the database. */
-export const deleteComment = async (cid: number) => await commentModel.deleteOne({ _id: cid });
+export const deleteComment = async (cid: string) => await commentModel.deleteOne({ _id: cid });

@@ -18,7 +18,7 @@ export const GET = async ({ params: { uid } }: RequestEvent) => {
 	});
 };
 
-export const POST = async ({ params: { uid }, request, cookies }: RequestEvent) => {
+export const PUT = async ({ params: { uid }, request, cookies }: RequestEvent) => {
 	// If user id is malformed throw a 404.
 	if (!uid) {
 		throw error(404);

@@ -60,7 +60,7 @@ export const findDetailbyTitleSource = async (title: string, source: string) =>
 
 // Update
 /** Update a detail in the database. */
-export const updateDetail = async (did: number, detail: Partial<IDetail>) =>
+export const updateDetail = async (did: string, detail: Partial<IDetail>) =>
 	await detailModel.updateOne({ _id: did }, { $set: detail });
 
 // Delete

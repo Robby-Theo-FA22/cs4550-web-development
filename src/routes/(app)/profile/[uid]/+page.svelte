@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import ProfileComment from '$lib/components/profile/ProfileComment.svelte';
 	import ProfileDetail from '$lib/components/profile/ProfileDetail.svelte';
 
 	const user = $page.data.user;
+	$: comments = user.comments;
+	$: likedComments = user.likedComments;
 	$: socialInteraction = user.socialInteraction;
 
 	// currentUser cookie
@@ -12,7 +14,7 @@
 	const handleChangeSocialStatus = async () => {
 		let userUpdate = { 'socialInteraction': !socialInteraction };
 		const response = fetch(`/api/user/${user._id}`, {
-			method: 'POST',
+			method: 'PUT',
 			body: JSON.stringify(userUpdate)
 		});
 
@@ -20,6 +22,10 @@
 			socialInteraction = !socialInteraction;
 		}
 	};
+
+	const deleteComment = (newComment: any) => {
+		comments = comments.filter((c) => c != newComment);
+	}
 </script>
 
 <h1>{user.username}'s Profile</h1>
@@ -28,7 +34,7 @@
 
 {#if socialInteraction}
 	<h3>Comments</h3>
-	{#each user.comments as cid}
+	{#each comments as cid}
 		<ProfileComment commentId={cid} />
 	{:else }
 		<p>Nothing here...</p>
@@ -57,7 +63,7 @@
 
 		<div class='mb-3'>
 			<h3>Your Liked Comments</h3>
-			{#each user.likedComments as cid}
+			{#each likedComments as cid}
 				<ProfileComment commentId={cid} />
 			{:else}
 				<p>Nothing here...</p>

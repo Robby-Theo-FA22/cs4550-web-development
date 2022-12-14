@@ -80,6 +80,10 @@ export const findUserById = async (id: string) => userModel.findById(id);
 export const findUserByUsername = async (username: string) =>
 	userModel.findOne({ username: username });
 
+/** Find the users who liked the comment */
+export const findUsersByLikedComment = async (cid: string) =>
+	userModel.find({ likedComments: cid });
+
 /** Find the user with the supplied credentials */
 export const findUserByCredentials = async (username: string, password: string) =>
 	userModel.findOne({ username: username, password: password });

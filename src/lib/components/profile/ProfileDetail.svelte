@@ -15,7 +15,7 @@
 {#if detail}
 		<div class='card bg-light'>
 			<div class='card-body'>
-				<a href='/detail/{detail._id}'><h4>{detail.title}</h4></a>
+				<a href='/details/{detail._id}'><h4>{detail.title}</h4></a>
 
 				<div class='d-flex justify-content-between'>
 					<div class='d-flex flex-row align-items-center'>
