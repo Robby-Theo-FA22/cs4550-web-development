@@ -70,7 +70,7 @@
 			<form class="card card-sm">
 				<div class="card-body row no-gutters align-items-center">
 					<div class="col-auto">
-						<i class="fas fa-search h4 text-body" />
+						<i class="fa-solid fa-magnifying-glass text-body" />
 					</div>
 					<div class="col">
 						<input
