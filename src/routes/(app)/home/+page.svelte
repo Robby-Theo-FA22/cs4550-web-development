@@ -1,6 +1,7 @@
 <script src="../assets/dist/js/bootstrap.bundle.min.js">
-	// can also define functions here to be used for events (user clicks on something to take them to something)
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+
 
 	function group(articles) {
 		return [
@@ -25,7 +26,13 @@
 			.catch((error) => console.log(error));
 	});
 
-	// here
+	// create a Detail object for the given article if one does not exist in the database, then redirect to details page
+	async function createDetailAndRedirect(title, source) {
+		const response = await fetch(`/api/search?title=${title}&source=${source}`);
+		let responseValues = await response.json();
+		console.log(responseValues);
+		goto(`/details/${responseValues}`);
+	}
 </script>
 
 <main>
@@ -56,7 +63,7 @@
 							<p class="card-text mb-auto">
 								{pairArticles[0].description}
 							</p>
-							<a href={pairArticles[0].url} class="stretched-link" target="_blank" />
+							<a on:click={createDetailAndRedirect(pairArticles[0].title, pairArticles[0].source.id)} href='' class="stretched-link"/>
 						</div>
 						<div class="col-auto d-none d-lg-block relative">
 							<img src={pairArticles[0].urlToImage} class="vertical-center" />
@@ -76,7 +83,7 @@
 							<p class="mb-auto">
 								{pairArticles[1].description}
 							</p>
-							<a href={pairArticles[1].url} class="stretched-link" target="_blank" />
+							<a on:click={createDetailAndRedirect(pairArticles[1].title, pairArticles[1].source.id)} href='' class="stretched-link"/>
 						</div>
 						<div class="col-auto d-none d-lg-block relative">
 							<img src={pairArticles[1].urlToImage} class="vertical-center" />
