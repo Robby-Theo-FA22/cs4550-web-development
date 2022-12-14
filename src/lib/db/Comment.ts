@@ -18,7 +18,7 @@ export interface IComment {
 	likes: Schema.Types.ObjectId[];
 }
 
-/** The Comment schema in Mongo. */
+/** The profile schema in Mongo. */
 const commentSchema = new Schema<IComment>(
 	{
 		body: { type: String, required: true },
@@ -47,7 +47,7 @@ const commentSchema = new Schema<IComment>(
 const commentModel = model<IComment>('Comment', commentSchema);
 
 /*******************************************
- ** CRUD actions for the Comment document. **
+ ** CRUD actions for the profile document. **
  *******************************************/
 // Create
 /** Create a comment and save it in the database. */

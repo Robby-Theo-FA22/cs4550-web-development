@@ -86,9 +86,9 @@ export const findUserByCredentials = async (username: string, password: string) 
 
 // Update
 /** Update a user in the database. */
-export const updateUser = async (uid: number, user: Partial<IUser>) =>
+export const updateUser = async (uid: string, user: Partial<IUser>) =>
 	await userModel.updateOne({ _id: uid }, { $set: user });
 
 // Delete
 /** Remove a user from the database. */
-export const deleteUser = async (uid: number) => await userModel.deleteOne({ _id: uid });
+export const deleteUser = async (uid: string) => await userModel.deleteOne({ _id: uid });
