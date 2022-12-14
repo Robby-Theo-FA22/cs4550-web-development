@@ -8,6 +8,7 @@ import { DB_URI } from '$env/static/private';
 mongoose.set('strictQuery', false);
 
 // Connect to MongoDB using the URI provided in .env
+console.log('Connecting to Mongo...');
 mongoose.connect(DB_URI).then(() => {
 	console.log('Mongo connected');
 });
