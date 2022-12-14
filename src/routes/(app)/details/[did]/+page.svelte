@@ -5,8 +5,11 @@
 
 	$: currentUserData = $page.data.currentUserData;
 	$: details = $page.data.details;
-	$: currentUserBookmarks = currentUserData.bookmarks
+	$: likedByCurrentUser = details.likes.includes(currentUserData?._id);
+
+	$: currentUserBookmarks = currentUserData.bookmarks;
 	$: bookmarkedByCurrentUser = currentUserBookmarks.includes(details?._id);
+
 	$: comments = details.comments;
 	$: externalDetails = $page.data.externalDetails;
 	$: externalContent = $page.data.externalContent;
@@ -17,6 +20,35 @@
 
 	const deleteComment = (newComment: any) => {
 		comments = comments.filter((c) => c != newComment);
+	};
+
+	const handleLike = async () => {
+		if (!currentUserData) return;
+
+		let detailsUpdate;
+		let userUpdate;
+		if (likedByCurrentUser) {
+			detailsUpdate = { 'likes': details.likes.filter((id) => id != currentUserData._id) };
+			userUpdate = { 'likedDetails': currentUserData.likedDetails.filter((id) => id != details._id) };
+		} else {
+			detailsUpdate = { 'likes': [...details.likes, currentUserData._id] };
+			userUpdate = { 'likedDetails': [...currentUserData.likedDetails, details._id] };
+		}
+
+		const detailsResponse = fetch(`/api/detail/${details._id}`, {
+			method: 'PUT',
+			body: JSON.stringify(detailsUpdate)
+		});
+
+		const userResponse = fetch(`/api/user/${currentUserData._id}`, {
+			method: 'PUT',
+			body: JSON.stringify(userUpdate)
+		});
+
+		if ((await detailsResponse).ok && (await userResponse).ok) {
+			details.likes = detailsUpdate.likes;
+			currentUserData.likedDetails = userUpdate.likedDetails;
+		}
 	};
 
 	const handleBookmark = async () => {
@@ -37,16 +69,21 @@
 		if ((await userResponse).ok) {
 			currentUserBookmarks = userUpdate.bookmarks;
 		}
-	}
+	};
 </script>
 
 {#if externalDetails}
 	<div>
 		<section id='intro' class='p-4 text-center bg-light'>
-			<div class='d-flex flex-row-reverse' on:click={handleBookmark}>
-				<i class='m-4fa-l fa-regular fa-bookmark text-{bookmarkedByCurrentUser ? "primary" : "black"}'></i>
+			<div class='d-flex justify-content-between'>
+				<div class='d-flex flex-row' on:click={handleLike}>
+					<i class='m-4fa-l fa-regular fa-thumbs-up text-{likedByCurrentUser ? "primary" : "black"}'></i>
+				</div>
+				<h1 class='mb-0 h4'>{externalDetails.title}</h1>
+				<div class='d-flex flex-row-reverse' on:click={handleBookmark}>
+					<i class='m-4fa-l fa-regular fa-bookmark text-{bookmarkedByCurrentUser ? "primary" : "black"}'></i>
+				</div>
 			</div>
-			<h1 class='mb-0 h4'>{externalDetails.title}</h1>
 		</section>
 
 		<!--Section: Post data-mdb-->
