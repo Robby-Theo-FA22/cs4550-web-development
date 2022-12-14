@@ -1,7 +1,7 @@
 import { redirect, type RequestEvent } from '@sveltejs/kit';
 import { findUserByUsername } from '$lib/db/User';
 
-export const GET = async ({ cookies, fetch }: RequestEvent) => {
+export const GET = async ({ cookies }: RequestEvent) => {
 	// Attempt to find the logged-in user. Redirect them to log in if not logged-in.
 	const userCookie = cookies.get('currentUser');
 	if (!userCookie) {
@@ -15,5 +15,5 @@ export const GET = async ({ cookies, fetch }: RequestEvent) => {
 	}
 
 	// Redirect to the logged-in user's profile page
-	return fetch(`/profile/${currentUser._id}`);
+	throw redirect(302, `/profile/${currentUser._id}`);
 };
