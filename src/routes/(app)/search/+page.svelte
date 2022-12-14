@@ -35,7 +35,7 @@
 		fetch(newsapiEndpoint, {
 			method: 'GET',
 			headers: {
-				'X-API-KEY': '2128dfda75c54ed3b045b635f45604e9'
+				'X-API-KEY': '6d840878a1e54db1b3172a96504b1aa8'
 			}
 		})
 			.then((response) => response.json())
