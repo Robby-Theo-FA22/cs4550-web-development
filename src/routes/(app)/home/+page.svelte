@@ -1,7 +1,9 @@
-<script src="../assets/dist/js/bootstrap.bundle.min.js">
+<script src="../assets/dist/js/bootstrap.bundle.min.js" lang='ts'>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-
+	import { page } from '$app/stores';
+	import DetailsComment from '$lib/components/details/DetailsComment.svelte';
+	import DetailsCommentForm from '$lib/components/details/DetailsCommentForm.svelte';
 
 	function group(articles) {
 		return [
@@ -33,6 +35,95 @@
 		console.log(responseValues);
 		goto(`/details/${responseValues}`);
 	}
+
+	$: currentUserData = $page.data.currentUserData;
+
+	let details;
+	let externalDetails;
+	let externalContent;
+	$: if (currentUserData) {
+		if (currentUserData.likedDetails.length !== 0) {
+			fetch(`/api/detail/${currentUserData.likedDetails[0]}`).then(response => response.json()).then(data => details = data);
+			fetch(`/api/detail/${currentUserData.likedDetails[0]}/external`).then(response => response.json()).then(data => externalDetails = data);
+			fetch(`/api/detail/${currentUserData.likedDetails[0]}/external/content`).then(response => response.json()).then(data => externalContent = data);
+		} else {
+			fetch(`/api/detail/6397b22cafe8001db60437ef`).then(response => response.json()).then(data => details = data);
+			fetch(`/api/detail/6397b22cafe8001db60437ef/external`).then(response => response.json()).then(data => externalDetails = data);
+			fetch(`/api/detail/6397b22cafe8001db60437ef/external/content`).then(response => response.json()).then(data => externalContent = data);
+		}
+	}
+
+	let likedByCurrentUser;
+	let currentUserBookmarks;
+	let bookmarkedByCurrentUser;
+	$: if (details) {
+		likedByCurrentUser = details.likes.includes(currentUserData?._id);
+	}
+	$: if (currentUserData) {
+		currentUserBookmarks = currentUserData.bookmarks;
+	}
+	$: if (currentUserBookmarks) {
+		bookmarkedByCurrentUser = currentUserBookmarks.includes(details?._id);
+	}
+
+
+
+	const addComment = (newComment: any) => {
+		details.comments = [...details.comments, newComment];
+	};
+
+	const deleteComment = (newComment: any) => {
+		details.comments = details.comments.filter((c) => c != newComment);
+	};
+
+	const handleLike = async () => {
+		if (!currentUserData) return;
+
+		let detailsUpdate;
+		let userUpdate;
+		if (likedByCurrentUser) {
+			detailsUpdate = { 'likes': details.likes.filter((id) => id != currentUserData._id) };
+			userUpdate = { 'likedDetails': currentUserData.likedDetails.filter((id) => id != details._id) };
+		} else {
+			detailsUpdate = { 'likes': [...details.likes, currentUserData._id] };
+			userUpdate = { 'likedDetails': [...currentUserData.likedDetails, details._id] };
+		}
+
+		const detailsResponse = fetch(`/api/detail/${details._id}`, {
+			method: 'PUT',
+			body: JSON.stringify(detailsUpdate)
+		});
+
+		const userResponse = fetch(`/api/user/${currentUserData._id}`, {
+			method: 'PUT',
+			body: JSON.stringify(userUpdate)
+		});
+
+		if ((await detailsResponse).ok && (await userResponse).ok) {
+			details.likes = detailsUpdate.likes;
+			currentUserData.likedDetails = userUpdate.likedDetails;
+		}
+	};
+
+	const handleBookmark = async () => {
+		if (!currentUserData) return;
+
+		let userUpdate;
+		if (bookmarkedByCurrentUser) {
+			userUpdate = { 'bookmarks': currentUserData.bookmarks.filter((id) => id != details._id) };
+		} else {
+			userUpdate = { 'bookmarks': [...currentUserData.bookmarks, details._id] };
+		}
+
+		const userResponse = fetch(`/api/user/${currentUserData._id}`, {
+			method: 'PUT',
+			body: JSON.stringify(userUpdate)
+		});
+
+		if ((await userResponse).ok) {
+			currentUserBookmarks = userUpdate.bookmarks;
+		}
+	};
 </script>
 
 <main>
@@ -43,7 +134,6 @@
 				Find information on the latest news around the world, and share insights and conversations
 				with your peers about them, all at the same time.
 			</p>
-			<p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
 		</div>
 	</div>
 
@@ -56,7 +146,7 @@
 					>
 						<div class="col p-4 d-flex flex-column position-static">
 							<strong class="d-inline-block mb-2 text-primary"
-								>{['World', 'Popular', 'Breaking'].at(Math.random() * 3)}</strong
+							>{['World', 'Popular', 'Breaking'].at(Math.random() * 3)}</strong
 							>
 							<h3 class="mb-0">{pairArticles[0].title}</h3>
 							<div class="mb-1 text-muted">{pairArticles[0].publishedAt.split('T')[0]}</div>
@@ -76,7 +166,7 @@
 					>
 						<div class="col p-4 d-flex flex-column position-static">
 							<strong class="d-inline-block mb-2 text-primary"
-								>{['World', 'Popular', 'Breaking'].at(Math.random() * 3)}</strong
+							>{['World', 'Popular', 'Breaking'].at(Math.random() * 3)}</strong
 							>
 							<h3 class="mb-0">{pairArticles[1].title}</h3>
 							<div class="mb-1 text-muted">{pairArticles[1].publishedAt.split('T')[0]}</div>
@@ -96,228 +186,169 @@
 		<p>Loading...</p>
 	{/if}
 
-	{#if true}
-		<div class="row g-5">
-			<div class="col-md-8">
-				<h3 class="pb-4 mb-4 fst-italic border-bottom">From your recent Activity</h3>
-
-				<article class="blog-post">
-					<h2 class="blog-post-title">
-						Latest blog post commented on/liked by user (or something they're interested in if no
-						comments/likes)
-					</h2>
-					<p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
-
-					<p>
-						This blog post shows a few different types of content that’s supported and styled with
-						Bootstrap. Basic typography, lists, tables, images, code, and more are all supported as
-						expected.
-					</p>
-					<hr />
-					<p>
-						This is some additional paragraph placeholder content. It has been written to fill the
-						available space and show how a longer snippet of text affects the surrounding content.
-						We'll repeat it often to keep the demonstration flowing, so be on the lookout for this
-						exact same string of text.
-					</p>
-					<h2>Blockquotes</h2>
-					<p>This is an example blockquote in action:</p>
-					<blockquote class="blockquote">
-						<p>Quoted text goes here.</p>
-					</blockquote>
-					<p>
-						This is some additional paragraph placeholder content. It has been written to fill the
-						available space and show how a longer snippet of text affects the surrounding content.
-						We'll repeat it often to keep the demonstration flowing, so be on the lookout for this
-						exact same string of text.
-					</p>
-					<h3>Example lists</h3>
-					<p>
-						This is some additional paragraph placeholder content. It's a slightly shorter version
-						of the other highly repetitive body text used throughout. This is an example unordered
-						list:
-					</p>
-					<ul>
-						<li>First list item</li>
-						<li>Second list item with a longer description</li>
-						<li>Third list item to close it out</li>
-					</ul>
-					<p>And this is an ordered list:</p>
-					<ol>
-						<li>First list item</li>
-						<li>Second list item with a longer description</li>
-						<li>Third list item to close it out</li>
-					</ol>
-					<p>And this is a definiton list:</p>
-					<dl>
-						<dt>HyperText Markup Language (HTML)</dt>
-						<dd>The language used to describe and define the content of a Web page</dd>
-						<dt>Cascading Style Sheets (CSS)</dt>
-						<dd>Used to describe the appearance of Web content</dd>
-						<dt>JavaScript (JS)</dt>
-						<dd>The programming language used to build advanced Web sites and applications</dd>
-					</dl>
-					<h3>Sub-heading</h3>
-					<p>
-						This is some additional paragraph placeholder content. It has been written to fill the
-						available space and show how a longer snippet of text affects the surrounding content.
-						We'll repeat it often to keep the demonstration flowing, so be on the lookout for this
-						exact same string of text.
-					</p>
-					<pre><code>Example code block</code></pre>
-					<p>
-						This is some additional paragraph placeholder content. It's a slightly shorter version
-						of the other highly repetitive body text used throughout.
-					</p>
-				</article>
-			</div>
-
-			<div class="col-md-4">
-				<div class="position-sticky" style="top: 2rem;">
-					<div class="p-4 mb-3 bg-light rounded">
-						<h4 class="fst-italic">About</h4>
-						<p class="mb-0">
-							Check out this news article that we noticed you were interested in, or might be
-							interested in.
-							<br />
-							<br />
-							And find more such articles below!
-						</p>
+	{#if currentUserData && externalDetails}
+		<div>
+			<section id='intro' class='p-4 text-center bg-light'>
+				<div class='d-flex justify-content-between'>
+					<div class='d-flex flex-row' on:click={handleLike}>
+						<i class='m-4fa-l fa-regular fa-thumbs-up text-{likedByCurrentUser ? "primary" : "black"}'></i>
 					</div>
-
-					<div class="p-4">
-						<h4 class="fst-italic">Recently Liked</h4>
-						<ol class="list-unstyled mb-0">
-							<li><a href="#">March 2021</a></li>
-							<li><a href="#">February 2021</a></li>
-							<li><a href="#">January 2021</a></li>
-							<li><a href="#">December 2020</a></li>
-							<li><a href="#">November 2020</a></li>
-							<li><a href="#">October 2020</a></li>
-							<li><a href="#">September 2020</a></li>
-							<li><a href="#">August 2020</a></li>
-							<li><a href="#">July 2020</a></li>
-							<li><a href="#">June 2020</a></li>
-							<li><a href="#">May 2020</a></li>
-							<li><a href="#">April 2020</a></li>
-						</ol>
-					</div>
-
-					<div class="p-4">
-						<h4 class="fst-italic">Recently Commented</h4>
-						<ol class="list-unstyled">
-							<li><a href="#">GitHub</a></li>
-							<li><a href="#">Twitter</a></li>
-							<li><a href="#">Facebook</a></li>
-						</ol>
+					<h1 class='mb-0 h4'>{externalDetails.title}</h1>
+					<div class='d-flex flex-row-reverse' on:click={handleBookmark}>
+						<i class='m-4fa-l fa-regular fa-bookmark text-{bookmarkedByCurrentUser ? "primary" : "black"}'></i>
 					</div>
 				</div>
-			</div>
+			</section>
+
+			<!--Section: Post data-mdb-->
+			<section class='border-bottom text-center mb-4'>
+				<img src={externalDetails.urlToImage} class='img-fluid shadow-2-strong rounded-5 mb-4' alt='' />
+
+				<div class='row align-items-center mb-4'>
+					<div class='col-lg-6 text-center text-lg-start mb-3 m-lg-0'>
+						<span> Published by {externalDetails.author ?? 'Unknown Author'}
+							on {new Date(externalDetails.publishedAt).toLocaleDateString("en-US", {
+								weekday: 'long',
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							})}
+							</span>
+					</div>
+				</div>
+			</section>
+			<!--Section: Post data-mdb-->
+
+			<!--Section: Text-->
+			<section>
+				<p>{externalContent ?? 'No content...'}</p>
+				{#if currentUserData}
+					<!--Section: Comments-->
+					<section class='border-bottom mb-3'>
+						<p class='text-center'><strong>Comments: {details.comments.length}</strong></p>
+
+						{#each details.comments as comment}
+							<DetailsComment commentId={comment} deleteComment={deleteComment} />
+						{/each}
+					</section>
+					<!--Section: Comments-->
+					{#if currentUserData.socialInteraction}
+						<!--Section: Post Comment-->
+						<section>
+							<DetailsCommentForm addComment={addComment} />
+						</section>
+						<!--Section: Reply-->
+					{/if}
+				{/if}
+			</section>
 		</div>
+	{:else}
+		<strong>Log in to see personalized content!</strong>
 	{/if}
 </main>
 
 <style>
-	.relative {
-		position: relative;
-	}
 
-	.vertical-center {
-		position: relative;
-		top: 50%;
-		transform: translateY(-50%);
-	}
+    .relative {
+        position: relative;
+    }
 
-	img {
-		max-width: 200px;
-		max-height: 500px;
-		width: auto;
-		height: auto;
-		margin-right: 20px;
-	}
+    .vertical-center {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 
-	.flex-equal > * {
-		flex: 1;
-	}
-	@media (min-width: 768px) {
-		.flex-md-equal > * {
-			flex: 1;
-		}
-	}
+    img {
+        max-width: 200px;
+        max-height: 500px;
+        width: auto;
+        height: auto;
+        margin-right: 20px;
+    }
 
-	.bd-placeholder-img {
-		font-size: 1.125rem;
-		text-anchor: middle;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		user-select: none;
-	}
+    .flex-equal > * {
+        flex: 1;
+    }
+    @media (min-width: 768px) {
+        .flex-md-equal > * {
+            flex: 1;
+        }
+    }
 
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		font-family: 'Playfair Display', Georgia, 'Times New Roman',
-			serif /*rtl:Amiri, Georgia, "Times New Roman", serif*/;
-	}
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
 
-	.display-4 {
-		font-size: 2.5rem;
-	}
-	@media (min-width: 768px) {
-		.display-4 {
-			font-size: 3rem;
-		}
-	}
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Playfair Display', Georgia, 'Times New Roman',
+        serif /*rtl:Amiri, Georgia, "Times New Roman", serif*/;
+    }
 
-	.nav-scroller {
-		position: relative;
-		z-index: 2;
-		height: 2.75rem;
-		overflow-y: hidden;
-	}
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    @media (min-width: 768px) {
+        .display-4 {
+            font-size: 3rem;
+        }
+    }
 
-	.nav-scroller .nav {
-		display: flex;
-		flex-wrap: nowrap;
-		padding-bottom: 1rem;
-		margin-top: -1px;
-		overflow-x: auto;
-		text-align: center;
-		white-space: nowrap;
-		-webkit-overflow-scrolling: touch;
-	}
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
 
-	.nav-scroller .nav-link {
-		padding-top: 0.75rem;
-		padding-bottom: 0.75rem;
-		font-size: 0.875rem;
-	}
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
 
-	@media (min-width: 768px) {
-		.h-md-250 {
-			height: 250px;
-		}
-	}
+    .nav-scroller .nav-link {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        font-size: 0.875rem;
+    }
 
-	/*
-		 * Blog posts
-		 */
-	.blog-post {
-		margin-bottom: 4rem;
-	}
-	.blog-post-title {
-		margin-bottom: 0.25rem;
-		font-size: 2.5rem;
-	}
-	.blog-post-meta {
-		margin-bottom: 1.25rem;
-		color: #727272;
-	}
+    @media (min-width: 768px) {
+        .h-md-250 {
+            height: 250px;
+        }
+    }
 
-	.center {
-		text-align: center;
-	}
+    /*
+			 * Blog posts
+			 */
+    .blog-post {
+        margin-bottom: 4rem;
+    }
+    .blog-post-title {
+        margin-bottom: 0.25rem;
+        font-size: 2.5rem;
+    }
+    .blog-post-meta {
+        margin-bottom: 1.25rem;
+        color: #727272;
+    }
+
+    .center {
+        text-align: center;
+    }
 </style>
