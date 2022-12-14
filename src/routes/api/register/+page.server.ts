@@ -10,6 +10,7 @@ export const actions: Actions = {
 		const username = data.get('username') as string;
 		const password = data.get('password') as string;
 		const verifyPassword = data.get('verifyPassword') as string;
+		const social = data.get('socialUser');
 
 		// Reject is username is empty
 		if (!username) {
@@ -42,7 +43,8 @@ export const actions: Actions = {
 		// Create a new user
 		await createUser({
 			username: username,
-			password: password
+			password: password,
+			socialInteraction: social != null
 		});
 
 		// Log the user in by setting the currentUser cookie to the user's username

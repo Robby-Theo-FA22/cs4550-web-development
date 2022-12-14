@@ -70,6 +70,14 @@
 			<br />
 		</div>
 
+		<div class="form-check">
+			<input class="form-check-input" type="checkbox" value="socialUser" id="socialUser" name='socialUser'>
+			<label class="form-check-label" for="socialUser">
+				Social User
+			</label>
+			<br/>
+		</div>
+
 		<div class="text-center">
 			<button class="btn btn-primary " disabled={!$form.valid} type="submit">Register </button>
 		</div>
