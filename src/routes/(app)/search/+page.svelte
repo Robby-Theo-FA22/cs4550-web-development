@@ -16,7 +16,6 @@
 	// group article results by 3 for display
 	function groupBy3(articles) {
 		let groupedArticles = [];
-		console.log(articles.length);
 		if (articles.length >= 3) {
 			for (let ii = 0; ii + 2 < articles.length; ii = ii + 3) {
 				groupedArticles.push([articles[ii], articles[ii + 1], articles[ii + 2]]);
@@ -47,6 +46,16 @@
 	// reset page if returning to /search
 	$: if (!$page.url.searchParams.get('criteria')) {
 		criteria = null;
+	}
+
+	// create a Detail object for the given article if one does not exist in the database, then redirect to details page
+	async function createDetailAndRedirect(title, source) {
+		const response = await fetch(`/api/search?title=${title}&source=${source}`);
+		let responseValues = await response.json();
+		let redirectUrl = new URL(
+			$page.url.toString().split('/search')[0] + '/details/' + responseValues
+		);
+		goto(redirectUrl);
 	}
 </script>
 
@@ -89,16 +98,22 @@
 	{#if searchResults.length === 0}
 		<h2>Looks like your search didn't come up with anything...</h2>
 	{:else if searchResults.length === 1 && searchResults[0].length < 3}
-		{#if searchResults[0].length == 1}
+		{#if searchResults[0].length === 1}
 			<div class="container">
 				<div class="row row-cols-1 g-3">
 					<div class="col">
 						<div class="card shadow-sm">
-							<img src={searchResults[0][0].urlToImage} />
+							<img src={searchResults[0][0].urlToImage} alt="" />
 							<div class="card-body">
-								<strong>{searchResults[0][0].description}</strong>
+								<strong>{searchResults[0][0].title}</strong>
 								<div class="d-flex justify-content-between align-items-center">
-									<a href={searchResults[0][0].url} class="stretched-link" target="_blank" />
+									<a
+										on:click={createDetailAndRedirect(
+											searchResults[0][0].title,
+											searchResults[0][0].source.id
+										)}
+										class="stretched-link"
+									/>
 									<p>{searchResults[0][0].description}</p>
 									<small class="text-muted">{searchResults[0][0].publishedAt.split('T')[0]}</small>
 								</div>
@@ -112,11 +127,18 @@
 				<div class="row row-cols-1 row-cols-sm-2 g-3">
 					<div class="col">
 						<div class="card shadow-sm">
-							<img src={searchResults[0][0].urlToImage} />
+							<img src={searchResults[0][0].urlToImage} alt="" />
 							<div class="card-body">
 								<strong>{searchResults[0][0].title}</strong>
 								<div class="d-flex justify-content-between align-items-center">
-									<a href={searchResults[0][0].url} class="stretched-link" target="_blank" />
+									<a
+										on:click={createDetailAndRedirect(
+											searchResults[0][0].title,
+											searchResults[0][0].publishedAt,
+											searchResults[0][0].source
+										)}
+										class="stretched-link"
+									/>
 									<p>{searchResults[0][0].description}</p>
 									<small class="text-muted">{searchResults[0][0].publishedAt.split('T')[0]}</small>
 								</div>
@@ -125,11 +147,18 @@
 					</div>
 					<div class="col">
 						<div class="card shadow-sm">
-							<img src={searchResults[0][1].urlToImage} />
+							<img src={searchResults[0][1].urlToImage} alt="" />
 							<div class="card-body">
 								<strong>{searchResults[0][1].title}</strong>
 								<div class="d-flex justify-content-between align-items-center">
-									<a href={searchResults[0][0].url} class="stretched-link" target="_blank" />
+									<a
+										on:click={createDetailAndRedirect(
+											searchResults[0][1].title,
+											searchResults[0][1].publishedAt,
+											searchResults[0][1].source
+										)}
+										class="stretched-link"
+									/>
 									<p>{searchResults[0][1].description}</p>
 									<small class="text-muted">{searchResults[0][1].publishedAt.split('T')[0]}</small>
 								</div>
@@ -146,11 +175,18 @@
 					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 						<div class="col">
 							<div class="card shadow-sm">
-								<img src={articleTrio[0].urlToImage} />
+								<img src={articleTrio[0].urlToImage} alt="" />
 								<div class="card-body">
 									<strong>{articleTrio[0].title}</strong>
 									<div class="d-flex justify-content-between align-items-center">
-										<a href={articleTrio[0].url} class="stretched-link" target="_blank" />
+										<a
+											on:click={createDetailAndRedirect(
+												articleTrio[0].title,
+												articleTrio[0].publishedAt,
+												articleTrio[0].source
+											)}
+											class="stretched-link"
+										/>
 										<p>{articleTrio[0].description}</p>
 										<small class="text-muted">{articleTrio[0].publishedAt.split('T')[0]}</small>
 									</div>
@@ -159,11 +195,18 @@
 						</div>
 						<div class="col">
 							<div class="card shadow-sm">
-								<img src={articleTrio[1].urlToImage} />
+								<img src={articleTrio[1].urlToImage} alt="" />
 								<div class="card-body">
 									<strong>{articleTrio[1].title}</strong>
 									<div class="d-flex justify-content-between align-items-center">
-										<a href={articleTrio[1].url} class="stretched-link" target="_blank" />
+										<a
+											on:click={createDetailAndRedirect(
+												articleTrio[1].title,
+												articleTrio[1].publishedAt,
+												articleTrio[1].source
+											)}
+											class="stretched-link"
+										/>
 										<p>{articleTrio[1].description}</p>
 										<small class="text-muted">{articleTrio[1].publishedAt.split('T')[0]}</small>
 									</div>
@@ -172,11 +215,18 @@
 						</div>
 						<div class="col">
 							<div class="card shadow-sm">
-								<img src={articleTrio[2].urlToImage} />
+								<img src={articleTrio[2].urlToImage} alt="" />
 								<div class="card-body">
 									<strong>{articleTrio[2].title}</strong>
 									<div class="d-flex justify-content-between align-items-center">
-										<a href={articleTrio[2].url} class="stretched-link" target="_blank" />
+										<a
+											on:click={createDetailAndRedirect(
+												articleTrio[2].title,
+												articleTrio[2].publishedAt,
+												articleTrio[2].source
+											)}
+											class="stretched-link"
+										/>
 										<p>{articleTrio[2].description}</p>
 										<small class="text-muted">{articleTrio[2].publishedAt.split('T')[0]}</small>
 									</div>

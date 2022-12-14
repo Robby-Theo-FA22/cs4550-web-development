@@ -24,6 +24,8 @@
 			.then((data) => (featuredArticles = group(data.articles.slice(0, 6))))
 			.catch((error) => console.log(error));
 	});
+
+	// here
 </script>
 
 <main>

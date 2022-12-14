@@ -5,11 +5,8 @@ export interface IDetail {
 	/** The detail's title. */
 	title: string;
 
-	/** The detail's date. */
-	date: Date;
-
-	/** The detail's sourceID. */
-	sourceID: string;
+	/** The detail's sourceId. */
+	sourceId: string;
 
 	/** The users that likes this detail. */
 	likes: Schema.Types.ObjectId[];
@@ -22,8 +19,7 @@ export interface IDetail {
 const detailSchema = new Schema<IDetail>(
 	{
 		title: { type: String, required: true },
-		date: { type: Date, required: true },
-		sourceID: { type: String, required: true },
+		sourceId: { type: String, required: true },
 		likes: [
 			{
 				type: Schema.Types.ObjectId,
@@ -48,15 +44,19 @@ const detailModel = model<IDetail>('Detail', detailSchema);
  *****************************************/
 // Create
 /** Create a detail and save it in the database. */
-export const createDetail = async (detail: AtLeast<IDetail, 'title' | 'date' | 'sourceID'>) =>
+export const createDetail = async (detail: AtLeast<IDetail, 'title' | 'sourceId'>) =>
 	detailModel.create(detail);
 
 // Read
 /** Find all details. */
 export const findDetails = async () => detailModel.find();
 
-/** Find detail by id. */
-export const findDetailById = async (did: string) => detailModel.findById(did);
+/** Find the detail associated with the given unique ID. */
+export const findDetailById = async (articleId: string) => detailModel.findById(articleId);
+
+/** Find the detail associated with the given title and source id. */
+export const findDetailbyTitleSource = async (title: string, source: string) =>
+	detailModel.findOne({ title: title, sourceId: source });
 
 // Update
 /** Update a detail in the database. */
