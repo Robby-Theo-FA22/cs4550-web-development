@@ -3,7 +3,7 @@
 	import ProfileComment from '$lib/components/profile/ProfileComment.svelte';
 	import ProfileDetail from '$lib/components/profile/ProfileDetail.svelte';
 
-	const user = $page.data.user;
+	$: user = $page.data.user;
 	$: comments = user.comments;
 	$: likedComments = user.likedComments;
 	$: socialInteraction = user.socialInteraction;
